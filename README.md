@@ -1,6 +1,6 @@
 ---
 title: AutoResearch AI
-emoji: rocket
+emoji: 🚀
 colorFrom: yellow
 colorTo: red
 sdk: docker
