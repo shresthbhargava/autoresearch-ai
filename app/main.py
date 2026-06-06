@@ -18,6 +18,7 @@ app.add_middleware(
 
 app.include_router(health.router, prefix="/api", tags=["health"])
 app.include_router(research.router, prefix="/api/research", tags=["research"])
+app.include_router(research.api_router, prefix="/api", tags=["research_api"])
 
 if __name__ == "__main__":
     import uvicorn
