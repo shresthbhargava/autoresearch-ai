@@ -1,6 +1,0 @@
-{
-  "name": "AutoResearch AI",
-  "description": "Multi-agent AI platform to generate structured Business Requirement Documents (BRD) and analyze research session parameters.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
