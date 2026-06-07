@@ -28,7 +28,7 @@ export default function GeneratePage() {
 
   // Check backend health on load
   useEffect(() => {
-    fetch("http://localhost:8000/api/health")
+    fetch("https://shresth0-autoresearch-ai.hf.space/api/health")
       .then((res) => {
         if (res.ok) setBackendStatus("online");
         else setBackendStatus("offline");
@@ -104,7 +104,7 @@ export default function GeneratePage() {
   const loadDemo = async () => {
     setError(null);
     try {
-      const res = await fetch("http://localhost:8000/api/demo/edtech");
+      const res = await fetch("https://shresth0-autoresearch-ai.hf.space/api/demo/edtech");
       if (!res.ok) throw new Error("Demo endpoint failed");
       const data = await res.json();
       
@@ -163,7 +163,7 @@ export default function GeneratePage() {
     const inputType = file ? (file.type.includes("pdf") ? "pdf" : "image") : "text";
 
     try {
-      const response = await fetch("http://localhost:8000/api/generate", {
+      const response = await fetch("https://shresth0-autoresearch-ai.hf.space/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -189,7 +189,7 @@ export default function GeneratePage() {
       }
     } catch (err: unknown) {
       setIsGenerating(false);
-      const msg = err instanceof Error ? err.message : "Failed to establish endpoint connection to backend on port 8000.";
+      const msg = err instanceof Error ? err.message : "Failed to establish endpoint connection to backend API.";
       setError(msg);
     }
   };

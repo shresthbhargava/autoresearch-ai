@@ -90,7 +90,7 @@ export default function ResultsPage() {
 
     const fetchSession = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/api/sessions/${sessionId}/agents`);
+        const res = await fetch(`https://shresth0-autoresearch-ai.hf.space/api/sessions/${sessionId}/agents`);
         if (!res.ok) {
           if (res.status === 404) {
             throw new Error("Session specifications not found. Verify session UUID.");
