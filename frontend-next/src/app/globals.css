@@ -85,8 +85,8 @@ table, th, td, thead, tbody, tr {
 .badge,
 [class*="badge"],
 [class*="ConfidenceBadge"],
-.font-mono.text-[9px],
-.font-mono.text-[10px] {
+.font-mono[class*="text-[9px]"],
+.font-mono[class*="text-[10px]"] {
   font-size: 12px !important;
 }
 
