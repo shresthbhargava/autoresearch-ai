@@ -1637,7 +1637,7 @@ export default function ResultsPage() {
       transition={{ duration: 0.4, delay: 14 * 0.1 }}
       className="card-3d glass-card rounded-xl p-5 glow-accent h-full"
     >
-      <div className="flex justify-between items-center mb-3 border-b border-darkBorder pb-2">
+      <div className="flex flex-col gap-2 mb-3 border-b border-darkBorder pb-2">
         <h3 className="text-xs font-mono font-bold uppercase tracking-widest text-neutral-400 mb-0">
           CITATION HIGHLIGHTS (GROUNDING)
         </h3>
@@ -1693,9 +1693,11 @@ export default function ResultsPage() {
         </div>
       ) : (
         <div className="space-y-3 animate-pulse">
-          <div className="h-16 bg-slate-900 rounded">
+          <div className="h-16 bg-zinc-900/50 border border-darkBorder/40 rounded-lg flex items-center justify-center">
+            <span className="text-[9px] font-mono text-zinc-500 tracking-wider">SPECS EXTRACTION PENDING...</span>
           </div>
-          <div className="h-16 bg-slate-900 rounded">
+          <div className="h-16 bg-zinc-900/50 border border-darkBorder/40 rounded-lg flex items-center justify-center">
+            <span className="text-[9px] font-mono text-zinc-500 tracking-wider">GROUNDING CHECK PENDING...</span>
           </div>
         </div>
       )}
