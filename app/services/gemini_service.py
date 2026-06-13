@@ -109,6 +109,10 @@ Return ONLY valid JSON with this BRD structure:
   "citations": [
     {"source_text": "sentence or quote from input text/context", "confidence": 0.95, "mapped_requirement": "which requirement or section this supports"}
   ],
+  "target_market": {
+    "title": "Target Market Analysis",
+    "content": "A detailed market size and opportunity text. Must explicitly define and list TAM (Total Addressable Market), SAM (Serviceable Addressable Market), and SOM (Serviceable Obtainable Market) with currency values (e.g. TAM: $10B, SAM: $2.5B, SOM: $150M) so they can be parsed."
+  },
   "overall_confidence": 0.0
 }
 
@@ -120,7 +124,7 @@ scope, stakeholders, functional_requirements,
 non_functional_requirements, user_stories, 
 tech_architecture, implementation_timeline, 
 kpi_metrics, risk_mitigation, swot, competitors, 
-citations
+citations, target_market
 Do not rename, skip, or add any keys."""
 
 
@@ -238,6 +242,10 @@ def generate_fallback_brd(extracted_data: dict) -> dict:
             {"source_text": "Hyperlocal medicine delivery app", "confidence": 0.98, "mapped_requirement": "Executive Summary, problem_statement, objectives, scope"},
             {"source_text": "Tier-2 Indian cities", "confidence": 0.95, "mapped_requirement": "problem_statement, objectives, swot.strengths, competitors"}
         ]
+        target_market = {
+            "title": "Target Market Analysis",
+            "content": "TAM: $5.0B (Indian E-Pharmacy market by 2028). SAM: $1.2B (Serviceable segment in Tier-2 and Tier-3 urban grids). SOM: $45M (Year 1 penetration targeting 150 pharmacies in the initial cities). MediRush focuses on elderly chronic care patients, busy working professionals, and local pharmacy digital sync buyers."
+        }
     else:
         # Default Solar Grid fallback
         title = f"BRD: {startup_name} - Peer-to-Peer Energy Grid"
@@ -271,6 +279,10 @@ def generate_fallback_brd(extracted_data: dict) -> dict:
         swot = {"strengths": ["Decentralized infrastructure"], "weaknesses": ["High hardware costs"], "opportunities": ["Grid integration"], "threats": ["Policy changes"]}
         competitors = [{"name": "Traditional Grid", "advantages": "High reliability", "disadvantages": "High transmission losses, no consumer credits", "risk_level": "High"}]
         citations = [{"source_text": "Solar energy credits", "confidence": 0.95, "mapped_requirement": "Executive Summary"}]
+        target_market = {
+            "title": "Target Market Analysis",
+            "content": "TAM: $12.5B (Global Peer-to-Peer solar energy credit and distributed microgrid market). SAM: $2.4B (Residential solar capacity owners and local grid operations). SOM: $120M (Initial pilot deployments across high-solar states like California and Arizona)."
+        }
 
     brd = {
         "title": title,
@@ -303,6 +315,7 @@ def generate_fallback_brd(extracted_data: dict) -> dict:
         "swot": swot,
         "competitors": competitors,
         "citations": citations,
+        "target_market": target_market,
         "overall_confidence": 0.95
     }
     

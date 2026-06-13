@@ -19,7 +19,12 @@ import {
   AlertTriangle,
   ChevronRight,
   Code,
-  Globe
+  Globe,
+  LayoutDashboard,
+  FileText,
+  BarChart3,
+  Cpu,
+  Activity
 } from "lucide-react";
 
 interface AgentTrace {
@@ -467,11 +472,11 @@ export default function ResultsPage() {
   };
 
   const tabs = [
-    { id: 'overview', label: 'Overview', icon: '📋' },
-    { id: 'brd', label: 'Full BRD', icon: '📄' },
-    { id: 'market', label: 'Market Analysis', icon: '📊' },
-    { id: 'tech', label: 'Architecture', icon: '🏗️' },
-    { id: 'agents', label: 'Agent Trace', icon: '🤖' },
+    { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+    { id: 'brd', label: 'Full BRD', icon: FileText },
+    { id: 'market', label: 'Market Analysis', icon: BarChart3 },
+    { id: 'tech', label: 'Architecture', icon: Cpu },
+    { id: 'agents', label: 'Agent Trace', icon: Activity },
   ];
 
   const suggestDomains = (name: string) => {
@@ -1313,6 +1318,11 @@ export default function ResultsPage() {
           </span>
         </div>
 
+        {/* Premium explanation badge */}
+        <div className="mb-6 p-4 bg-accent/5 border border-accent/25 rounded-lg text-xs leading-relaxed text-zinc-300">
+          ✨ <strong>Multi-Agent Verification Trail:</strong> Displays logs and output snapshots from the five autonomous AI specialist nodes collaborating in our pipeline: Input Verification (InputAgent), Content Extraction (ExtractionAgent), Context & Tech Stack Enrichment (EnrichmentAgent), BRD Compilation (BRDAgent), and Automated Quality Check (QualityAgent).
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-5 gap-3.5">
           {agentsList.map((ag) => {
             const trace = traces.find((t) => t.agent === ag.name);
@@ -1899,22 +1909,27 @@ export default function ResultsPage() {
 
         {/* Tab Navigation System */}
         <div className="flex gap-2 mb-4 border-b border-zinc-800 overflow-x-auto pb-0 no-print">
-          {tabs.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-6 py-3 
-                         text-base font-mono whitespace-nowrap
-                         border-b-2 transition-all ${
-                activeTab === tab.id
-                  ? 'border-amber-500 text-amber-400 font-bold'
-                  : 'border-transparent text-zinc-500 hover:text-zinc-300'
-              }`}
-            >
-              <span>{tab.icon}</span>
-              <span>{tab.label}</span>
-            </button>
-          ))}
+          {tabs.map(tab => {
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2.5 px-6 py-3 
+                           text-base font-mono whitespace-nowrap
+                           border-b-2 transition-all cursor-pointer ${
+                  activeTab === tab.id
+                    ? 'border-amber-500 text-amber-400 font-bold'
+                    : 'border-transparent text-zinc-500 hover:text-zinc-300'
+                }`}
+              >
+                <Icon className={`w-4 h-4 shrink-0 transition-colors ${
+                  activeTab === tab.id ? 'text-amber-400' : 'text-zinc-500'
+                }`} />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
         </div>
 
         {/* OVERVIEW TAB */}
@@ -1954,7 +1969,7 @@ export default function ResultsPage() {
         {/* FULL BRD TAB */}
         {activeTab === 'brd' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 brd-tab-content">
-            <div className="col-span-1 lg:col-span-8 flex flex-col gap-6">
+            <div className="col-span-1 lg:col-span-9 flex flex-col gap-6">
               
               {/* Section 1: Executive Summary */}
               <motion.div
@@ -2636,247 +2651,197 @@ export default function ResultsPage() {
 
             </div>
 
-            <div className="col-span-1 lg:col-span-4 flex flex-col gap-6">
-              {renderSWOTGrid()}
-              {renderCompetitorTable()}
+            <div className="col-span-1 lg:col-span-3 flex flex-col gap-6">
               {renderCitationHighlights()}
             </div>
           </div>
         )}
 
         {/* MARKET ANALYSIS TAB */}
-        {activeTab === 'market' && (
-  <div className="space-y-6">
-    
-    {/* Market Size Hero */}
-    <div className="grid grid-cols-3 gap-4">
-      {[
-        { 
-          label: 'TAM', 
-          sublabel: 'Total Addressable Market',
-          value: extractMarketSize(
-            brdData?.brd?.target_market?.content, 'TAM'
-          ) || 'Large Market',
-          color: 'blue',
-          size: 280
-        },
-        { 
-          label: 'SAM', 
-          sublabel: 'Serviceable Addressable Market',
-          value: extractMarketSize(
-            brdData?.brd?.target_market?.content, 'SAM'
-          ) || 'Growing Segment',
-          color: 'amber',
-          size: 180
-        },
-        { 
-          label: 'SOM', 
-          sublabel: 'Serviceable Obtainable Market',
-          value: extractMarketSize(
-            brdData?.brd?.target_market?.content, 'SOM'
-          ) || 'Year 1 Target',
-          color: 'green',
-          size: 90
-        },
-      ].map(({ label, sublabel, value, color }) => (
-        <div key={label} 
-             className={`border border-${color}-500/30 
-                        bg-${color}-500/5 rounded-xl p-6
-                        flex flex-col items-center 
-                        justify-center text-center`}>
-          <div className={`text-${color}-400 font-mono 
-                          text-xs tracking-widest mb-2`}>
-            {label}
-          </div>
-          <div className={`text-${color}-300 font-bold 
-                          text-2xl mb-1`}>
-            {value}
-          </div>
-          <div className="text-zinc-500 text-xs">
-            {sublabel}
-          </div>
-        </div>
-      ))}
-    </div>
-
-    {/* Market Trends */}
-    <div className="border border-zinc-800 rounded-xl p-6 
-                    bg-zinc-950/80 backdrop-blur">
-      <h3 className="text-lg font-bold text-white 
-                     font-mono mb-4 tracking-widest">
-        📈 TARGET MARKET ANALYSIS
-      </h3>
-      <p className="text-zinc-300 text-base leading-relaxed">
-        {brdData?.brd?.target_market?.content || 
-         'No market analysis available'}
-      </p>
-    </div>
-
-    {/* Competitor Grid */}
-    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-    {((brdData as any)?.competitors?.length > 0 || 
-      (brdData?.brd?.competitors?.length ?? 0) > 0) && (
-      <div className="border border-zinc-800 rounded-xl p-6 
-                      bg-zinc-950/80 backdrop-blur">
-        <h3 className="text-lg font-bold text-white 
-                       font-mono mb-6 tracking-widest">
-          ⚔️ COMPETITIVE LANDSCAPE
-        </h3>
-        <div className="grid grid-cols-1 gap-4">
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-          {((brdData as any)?.competitors || 
-            brdData?.brd?.competitors || [])
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            .map((c: any, i: number) => (
-            <div key={i} 
-                 className="border border-zinc-700/50 
-                            rounded-xl p-5 bg-zinc-900/50
-                            hover:border-amber-500/30 
-                            transition-all">
-              <div className="flex items-start 
-                              justify-between mb-3">
-                <h4 className="font-bold text-white 
-                               text-lg">{c.name}</h4>
-                <span className={`px-3 py-1 rounded-full 
-                  text-xs font-mono ${
-                  c.risk_level === 'HIGH' 
-                    ? 'bg-red-500/20 text-red-400 border border-red-500/30'
-                    : c.risk_level === 'MEDIUM'
-                    ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                    : 'bg-green-500/20 text-green-400 border border-green-500/30'
-                }`}>
-                  {c.risk_level || 'MEDIUM'} RISK
-                </span>
+        {activeTab === 'market' && (() => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const rawMarket = brdData?.brd?.target_market as any;
+          const marketText = typeof rawMarket === 'string' 
+            ? rawMarket 
+            : (rawMarket?.content || rawMarket?.text || '');
+          
+          return (
+            <div className="space-y-6">
+              
+              {/* Market Size Hero */}
+              <div className="grid grid-cols-3 gap-4">
+                {[
+                  { 
+                    label: 'TAM', 
+                    sublabel: 'Total Addressable Market',
+                    value: extractMarketSize(marketText, 'TAM') || 'Large Market',
+                    color: 'blue',
+                    size: 280
+                  },
+                  { 
+                    label: 'SAM', 
+                    sublabel: 'Serviceable Addressable Market',
+                    value: extractMarketSize(marketText, 'SAM') || 'Growing Segment',
+                    color: 'amber',
+                    size: 180
+                  },
+                  { 
+                    label: 'SOM', 
+                    sublabel: 'Serviceable Obtainable Market',
+                    value: extractMarketSize(marketText, 'SOM') || 'Year 1 Target',
+                    color: 'green',
+                    size: 90
+                  },
+                ].map(({ label, sublabel, value, color }) => (
+                  <div key={label} 
+                       className={`border border-${color}-500/30 
+                                  bg-${color}-500/5 rounded-xl p-6
+                                  flex flex-col items-center 
+                                  justify-center text-center`}>
+                    <div className={`text-${color}-400 font-mono 
+                                    text-xs tracking-widest mb-2`}>
+                      {label}
+                    </div>
+                    <div className={`text-${color}-300 font-bold 
+                                    text-2xl mb-1`}>
+                      {value}
+                    </div>
+                    <div className="text-zinc-500 text-xs">
+                      {sublabel}
+                    </div>
+                  </div>
+                ))}
               </div>
-              <p className="text-zinc-400 text-sm 
-                            mb-3">{c.description}</p>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <div className="text-green-400 text-xs 
-                                  font-mono mb-1">
-                    STRENGTHS
-                  </div>
-                  <p className="text-zinc-300 text-sm">
-                    {c.strengths || c.advantages}
-                  </p>
-                </div>
-                <div>
-                  <div className="text-red-400 text-xs 
-                                  font-mono mb-1">
-                    WEAKNESSES
-                  </div>
-                  <p className="text-zinc-300 text-sm">
-                    {c.weaknesses || c.disadvantages}
-                  </p>
-                </div>
+
+              {/* Market Trends */}
+              <div className="border border-zinc-800 rounded-xl p-6 
+                              bg-zinc-950/80 backdrop-blur">
+                <h3 className="text-lg font-bold text-white 
+                               font-mono mb-4 tracking-widest">
+                  📈 TARGET MARKET ANALYSIS
+                </h3>
+                <p className="text-zinc-300 text-base leading-relaxed">
+                  {marketText || 'No market analysis available'}
+                </p>
               </div>
-              {c.differentiation && (
-                <div className="mt-3 pt-3 
-                                border-t border-zinc-700">
-                  <div className="text-amber-400 text-xs 
-                                  font-mono mb-1">
-                    HOW WE WIN
+
+              {/* Competitor Grid */}
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {((brdData as any)?.competitors?.length > 0 || 
+                (brdData?.brd?.competitors?.length ?? 0) > 0) && (
+                <div className="border border-zinc-800 rounded-xl p-6 
+                                bg-zinc-950/80 backdrop-blur">
+                  <h3 className="text-lg font-bold text-white 
+                                 font-mono mb-6 tracking-widest">
+                    ⚔️ COMPETITIVE LANDSCAPE
+                  </h3>
+                  <div className="grid grid-cols-1 gap-4">
+                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                    {((brdData as any)?.competitors || 
+                      brdData?.brd?.competitors || [])
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      .map((c: any, i: number) => (
+                      <div key={i} 
+                           className="border border-zinc-700/50 
+                                      rounded-xl p-5 bg-zinc-900/50
+                                      hover:border-amber-500/30 
+                                      transition-all">
+                        <div className="flex items-start 
+                                        justify-between mb-3">
+                          <h4 className="font-bold text-white 
+                                         text-lg">{c.name}</h4>
+                          <span className={`px-3 py-1 rounded-full 
+                            text-xs font-mono ${
+                            c.risk_level === 'HIGH' 
+                              ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                              : c.risk_level === 'MEDIUM'
+                              ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                              : 'bg-green-500/20 text-green-400 border border-green-500/30'
+                          }`}>
+                            {c.risk_level || 'MEDIUM'} RISK
+                          </span>
+                        </div>
+                        <p className="text-zinc-400 text-sm 
+                                      mb-3">{c.description}</p>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <div className="text-green-400 text-xs 
+                                            font-mono mb-1">
+                              STRENGTHS
+                            </div>
+                            <p className="text-zinc-300 text-sm">
+                              {c.strengths || c.advantages}
+                            </p>
+                          </div>
+                          <div>
+                            <div className="text-red-400 text-xs 
+                                            font-mono mb-1">
+                              WEAKNESSES
+                            </div>
+                            <p className="text-zinc-300 text-sm">
+                              {c.weaknesses || c.disadvantages}
+                            </p>
+                          </div>
+                        </div>
+                        {c.differentiation && (
+                          <div className="mt-3 pt-3 
+                                          border-t border-zinc-700">
+                            <div className="text-amber-400 text-xs 
+                                            font-mono mb-1">
+                              HOW WE WIN
+                            </div>
+                            <p className="text-zinc-300 text-sm">
+                              {c.differentiation}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                  <p className="text-zinc-300 text-sm">
-                    {c.differentiation}
-                  </p>
+                </div>
+              )}
+
+              {/* Citation Panel */}
+              {(brdData?.brd?.citations?.length ?? 0) > 0 && (
+                <div className="border border-zinc-800 rounded-xl 
+                                p-6 bg-zinc-950/80 backdrop-blur">
+                  <h3 className="text-lg font-bold text-white 
+                                 font-mono mb-4 tracking-widest">
+                    📌 CITATION HIGHLIGHTS
+                  </h3>
+                  <div className="space-y-3">
+                    {brdData?.brd?.citations?.slice(0, 5)
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      .map((c: any, i: number) => (
+                      <div key={i} 
+                           className="border border-zinc-700/50 
+                                      rounded-lg p-4 bg-zinc-900/50">
+                        <p className="text-zinc-300 text-sm 
+                                      italic mb-2">
+                          &quot;{c.claim || c.source_text}&quot;
+                        </p>
+                        <div className="flex items-center 
+                                        justify-between">
+                          <span className="text-blue-400 text-xs 
+                                           font-mono">
+                            SOURCE: {(c.source || 
+                              c.mapped_requirement || 
+                              'user_input').toUpperCase()}
+                          </span>
+                          <span className="text-green-400 text-xs 
+                                           font-mono">
+                            {Math.round((c.confidence || 0.85) * 100)}% 
+                            CONFIDENCE
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
-          ))}
-        </div>
-      </div>
-    )}
-
-    {/* SWOT in Market tab too */}
-    {brdData?.brd?.swot && (
-      <div className="border border-zinc-800 rounded-xl 
-                      p-6 bg-zinc-950/80 backdrop-blur">
-        <h3 className="text-lg font-bold text-white 
-                       font-mono mb-6 tracking-widest">
-          ⚡ SWOT ANALYSIS
-        </h3>
-        <div className="grid grid-cols-2 gap-4">
-          {[
-            { key: 'strengths', label: 'STRENGTHS', 
-              color: 'green', icon: '💪' },
-            { key: 'weaknesses', label: 'WEAKNESSES', 
-              color: 'red', icon: '⚠️' },
-            { key: 'opportunities', label: 'OPPORTUNITIES', 
-              color: 'blue', icon: '🚀' },
-            { key: 'threats', label: 'THREATS', 
-              color: 'amber', icon: '🛡️' },
-          ].map(({ key, label, color, icon }) => (
-            <div key={key} 
-                 className={`border border-${color}-500/20 
-                            bg-${color}-500/5 rounded-xl p-5`}>
-              <div className={`text-${color}-400 font-mono 
-                              text-xs tracking-widest mb-3 
-                              flex items-center gap-2`}>
-                <span>{icon}</span>
-                <span>{label}</span>
-              </div>
-              <ul className="space-y-2">
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                {(((brdData?.brd?.swot as any)?.[key]) || [])
-                  .map((item: string, i: number) => (
-                  <li key={i} 
-                      className="text-zinc-300 text-sm 
-                                 flex items-start gap-2">
-                    <span className={`text-${color}-400 
-                                     mt-0.5 flex-shrink-0`}>
-                      →
-                    </span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
-    )}
-
-    {/* Citation Panel */}
-    {(brdData?.brd?.citations?.length ?? 0) > 0 && (
-      <div className="border border-zinc-800 rounded-xl 
-                      p-6 bg-zinc-950/80 backdrop-blur">
-        <h3 className="text-lg font-bold text-white 
-                       font-mono mb-4 tracking-widest">
-          📌 CITATION HIGHLIGHTS
-        </h3>
-        <div className="space-y-3">
-          {brdData?.brd?.citations?.slice(0, 5)
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            .map((c: any, i: number) => (
-            <div key={i} 
-                 className="border border-zinc-700/50 
-                            rounded-lg p-4 bg-zinc-900/50">
-              <p className="text-zinc-300 text-sm 
-                            italic mb-2">
-                &quot;{c.claim || c.source_text}&quot;
-              </p>
-              <div className="flex items-center 
-                              justify-between">
-                <span className="text-blue-400 text-xs 
-                                 font-mono">
-                  SOURCE: {(c.source || 
-                    c.mapped_requirement || 
-                    'user_input').toUpperCase()}
-                </span>
-                <span className="text-green-400 text-xs 
-                                 font-mono">
-                  {Math.round((c.confidence || 0.85) * 100)}% 
-                  CONFIDENCE
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    )}
-  </div>
-)}
+          );
+        })()}
 
         {/* ARCHITECTURE TAB */}
         {activeTab === 'tech' && (

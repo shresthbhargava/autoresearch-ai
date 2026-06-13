@@ -137,7 +137,8 @@ async def generate_brd_background_task(
             ("timeline", brd.get("timeline", [])),
             ("swot", brd.get("swot", {})),
             ("competitors", brd.get("competitors", [])),
-            ("citations", brd.get("citations", []))
+            ("citations", brd.get("citations", [])),
+            ("target_market", brd.get("target_market", {}))
         ]
         
         for key, val in sections_in_order:
