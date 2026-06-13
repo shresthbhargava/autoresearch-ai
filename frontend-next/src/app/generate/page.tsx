@@ -11,8 +11,11 @@ import {
   RotateCcw,
   AlertCircle,
   Terminal,
-  Trash2
+  Trash2,
+  Globe
 } from "lucide-react";
+import AnimatedBackground from "@/components/AnimatedBackground";
+import { translations, Language } from "@/utils/translations";
 
 export default function GeneratePage() {
   const router = useRouter();
@@ -25,6 +28,23 @@ export default function GeneratePage() {
   const [backendStatus, setBackendStatus] = useState<"checking" | "online" | "offline">("checking");
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [lang, setLang] = useState<Language>('en');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedLang = localStorage.getItem('lang') as Language;
+      if (savedLang && ['en', 'hi', 'es'].includes(savedLang)) {
+        setLang(savedLang);
+      }
+    }
+  }, []);
+
+  const changeLanguage = (newLang: Language) => {
+    setLang(newLang);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('lang', newLang);
+    }
+  };
 
   // Check backend health on load
   useEffect(() => {
@@ -196,6 +216,7 @@ export default function GeneratePage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-accent/30 selection:text-accent relative overflow-hidden">
+      <AnimatedBackground />
       {/* Background decoration grid */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#f5a62304_1px,transparent_1px),linear-gradient(to_bottom,#f5a62304_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none opacity-40"></div>
       {/* Subtle organic light spots */}
@@ -211,15 +232,29 @@ export default function GeneratePage() {
             </div>
             <div>
               <h1 className="text-lg font-bold tracking-tight bg-gradient-to-r from-white to-[#f5a623] bg-clip-text text-transparent">
-                AutoResearch AI
+                {translations[lang].title}
               </h1>
               <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest block -mt-1">
-                Multi-Agent BRD Orchestrator
+                {translations[lang].subtitle}
               </span>
             </div>
           </div>
 
           <div className="flex items-center gap-6">
+            {/* Language Selector Dropdown */}
+            <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-none bg-[#050505] border border-darkBorder">
+              <Globe className="w-3.5 h-3.5 text-zinc-400" />
+              <select
+                value={lang}
+                onChange={(e) => changeLanguage(e.target.value as Language)}
+                className="bg-transparent text-[10px] font-mono text-neutral-300 uppercase tracking-wider focus:outline-none cursor-pointer pr-1"
+              >
+                <option value="en" className="bg-[#050505] text-white">English (EN)</option>
+                <option value="hi" className="bg-[#050505] text-white">हिन्दी (HI)</option>
+                <option value="es" className="bg-[#050505] text-white">Español (ES)</option>
+              </select>
+            </div>
+
             {/* Backend Connection Indicator */}
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-none bg-[#050505] border border-darkBorder">
               <span className={`w-2 h-2 rounded-none ${
@@ -231,10 +266,10 @@ export default function GeneratePage() {
               }`}></span>
               <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-wider">
                 {backendStatus === "online" 
-                  ? "API: Online" 
+                  ? translations[lang].apiOnline 
                   : backendStatus === "offline" 
-                    ? "API: Offline" 
-                    : "Checking API..."}
+                    ? translations[lang].apiOffline 
+                    : translations[lang].apiChecking}
               </span>
             </div>
           </div>
@@ -251,11 +286,10 @@ export default function GeneratePage() {
             <span>Google Gemini-Powered Explainable Architectures</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight bg-gradient-to-b from-white to-neutral-300 bg-clip-text text-transparent mb-3">
-            Synthesize Enterprise BRDs in Under 60 Seconds
+            {translations[lang].heroTitle}
           </h2>
           <p className="text-sm text-neutral-400 max-w-xl mx-auto leading-relaxed">
-            Provide a basic concept description or drop your research documents. 
-            Our 5 specialized agents will validate, extract, enrich, generate, and verify your specifications live.
+            {translations[lang].heroDesc}
           </p>
         </div>
 
@@ -264,9 +298,9 @@ export default function GeneratePage() {
           <div className="p-6 border-b border-darkBorder bg-card flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div>
               <h3 className="text-sm font-bold uppercase tracking-wider text-white">
-                Configure Research Input
+                {translations[lang].inputHeader}
               </h3>
-              <p className="text-xs text-neutral-500">Describe or upload the source parameters for generation.</p>
+              <p className="text-xs text-neutral-500">{translations[lang].inputSub}</p>
             </div>
             
             <button
@@ -276,7 +310,7 @@ export default function GeneratePage() {
               className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-none text-xs font-mono font-bold tracking-tight btn-3d-secondary uppercase cursor-pointer"
             >
               <RotateCcw className="w-3 h-3 text-accent" />
-              Load Edtech Demo
+              {translations[lang].loadDemo}
             </button>
           </div>
 
@@ -284,7 +318,7 @@ export default function GeneratePage() {
             {/* Startup/Product Name Field */}
             <div className="flex flex-col gap-1.5">
               <label htmlFor="startup-name" className="text-xs font-mono font-bold text-neutral-400 uppercase tracking-widest">
-                1. Startup / Product Name
+                {translations[lang].fieldStartup}
               </label>
               <input
                 id="startup-name"
@@ -292,7 +326,7 @@ export default function GeneratePage() {
                 value={startupName}
                 onChange={(e) => setStartupName(e.target.value)}
                 disabled={isGenerating}
-                placeholder="e.g. EduStream AI"
+                placeholder={translations[lang].placeholderStartup}
                 className="w-full bg-[#0a0a0a] border border-darkBorder rounded-none px-4 py-2.5 font-sans text-sm text-white focus:outline-none focus:border-accent transition-all duration-200 placeholder:text-neutral-600 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)] focus:shadow-[inset_0_2px_4px_rgba(0,0,0,0.8),0_0_10px_rgba(245,166,35,0.05)]"
               />
             </div>
@@ -301,18 +335,22 @@ export default function GeneratePage() {
             <div className="flex flex-col gap-1.5">
               <div className="flex justify-between items-center">
                 <label htmlFor="text-input" className="text-xs font-mono font-bold text-neutral-400 uppercase tracking-widest">
-                  2. Brief Concept Description
+                  {translations[lang].fieldDesc}
                 </label>
-                <span className="text-[10px] font-mono text-neutral-500">
-                  {textInput.length} characters
-                </span>
+                <div className="flex items-center gap-3">
+                  <span className="text-[10px] font-mono text-neutral-500">
+                    {textInput.length} characters
+                  </span>
+                </div>
               </div>
+
+
               <textarea
                 id="text-input"
                 value={textInput}
                 onChange={(e) => setTextInput(e.target.value)}
                 disabled={isGenerating}
-                placeholder="Describe your core product offering, target market segment, success metrics, technical stack, or other details. For multimodal inputs, this serves as extra context..."
+                placeholder={translations[lang].placeholderDesc}
                 className="w-full bg-[#0a0a0a] border border-darkBorder rounded-none px-4 py-3 font-sans text-sm text-white focus:outline-none focus:border-accent transition-all duration-200 placeholder:text-neutral-600 min-h-[140px] resize-none leading-relaxed shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)] focus:shadow-[inset_0_2px_4px_rgba(0,0,0,0.8),0_0_10px_rgba(245,166,35,0.05)]"
               />
             </div>
@@ -320,7 +358,7 @@ export default function GeneratePage() {
             {/* File Upload Zone */}
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-mono font-bold text-neutral-400 uppercase tracking-widest">
-                3. Upload Reference Materials (Multimodal)
+                {translations[lang].fieldUpload}
               </label>
 
               {!file ? (
@@ -344,10 +382,10 @@ export default function GeneratePage() {
                   />
                   <Upload className="w-8 h-8 text-neutral-500 mx-auto mb-2.5" />
                   <p className="text-xs font-semibold text-neutral-200">
-                    Drag and drop your project PDF file or wireframe image here
+                    {translations[lang].dragDrop}
                   </p>
                   <p className="text-[10px] text-neutral-500 mt-1 font-mono">
-                    PDF, PNG, JPG, WEBP formats supported (Max 5MB)
+                    {translations[lang].dragDropSub}
                   </p>
                 </div>
               ) : (
@@ -396,12 +434,12 @@ export default function GeneratePage() {
               {isGenerating ? (
                 <>
                   <div className="w-4 h-4 border-2 border-neutral-400 border-t-white rounded-full animate-spin"></div>
-                  <span>Genesis Engine Starting...</span>
+                  <span>{translations[lang].btnGenerating}</span>
                 </>
               ) : (
                 <>
                   <Play className="w-4 h-4 fill-current" />
-                  <span>Generate BRD Outline</span>
+                  <span>{translations[lang].btnGenerate}</span>
                 </>
               )}
             </button>
@@ -412,7 +450,7 @@ export default function GeneratePage() {
       {/* Footer */}
       <footer className="border-t border-darkBorder bg-card py-4 mt-auto">
         <div className="max-w-7xl mx-auto px-4 text-center font-mono text-[10px] text-neutral-500 uppercase tracking-wider">
-          AutoResearch AI System • Version 1.4.0 • Google Cloud Architecture Sandbox
+          {translations[lang].footer}
         </div>
       </footer>
     </div>

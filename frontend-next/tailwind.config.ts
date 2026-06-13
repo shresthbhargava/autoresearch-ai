@@ -8,6 +8,15 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontSize: {
+        'xs': '12px',
+        'sm': '14px', 
+        'base': '16px',
+        'lg': '18px',
+        'xl': '20px',
+        '2xl': '24px',
+        '3xl': '30px',
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

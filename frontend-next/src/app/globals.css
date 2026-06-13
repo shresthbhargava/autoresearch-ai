@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,12 +14,50 @@
   --accent-dark: #d9820f;
   --accent-shadow: #b36400;
   --accent-foreground: #000000;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-serif: 'Instrument Serif', serif;
 }
 
 body {
+  font-family: var(--font-display);
+  font-size: 16px;
+  line-height: 1.7;
   color: var(--foreground);
   background: var(--background);
   overflow-x: hidden;
+}
+
+h1, h2, h3 { 
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.font-mono { 
+  font-family: var(--font-mono) !important; 
+}
+
+/* Section headings */
+.brd-section-title {
+  font-size: 18px !important;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Body text */
+.brd-section-body {
+  font-size: 15px !important;
+  line-height: 1.8 !important;
+  color: #c8d6f0;
+}
+
+/* Score number */
+.score-number {
+  font-family: var(--font-display);
+  font-size: 80px !important;
+  font-weight: 800;
+  line-height: 1;
 }
 
 @layer utilities {
@@ -136,4 +176,98 @@ body {
 }
 .flip-card-back {
   transform: rotateY(180deg);
+}
+
+@media print {
+  .no-print { display: none !important; }
+  .brd-content, 
+  .brd-content *,
+  .brd-content p,
+  .brd-content h1,
+  .brd-content h2,
+  .brd-content h3,
+  .brd-content h4,
+  .brd-content h5,
+  .brd-content h6,
+  .brd-content span,
+  .brd-content li,
+  .brd-content td,
+  .brd-content th { 
+    background: transparent !important; 
+    color: black !important;
+    border-color: #ccc !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  body { 
+    background: white !important; 
+    color: black !important;
+  }
+}
+
+/* Premium Typographic Scale & Accessibility Enforcements */
+body {
+  font-size: 16px !important;
+  line-height: 1.7 !important;
+}
+
+/* Base line-height everywhere: 1.7 minimum */
+*, *::before, *::after {
+  line-height: 1.7;
+}
+
+/* Section headings (h2, h3): minimum 20px */
+h2, h3 {
+  font-size: 20px !important;
+}
+
+/* Body text in BRD sections: minimum 15px */
+.brd-content p, 
+.brd-content li,
+.brd-content div.text-sm,
+.brd-content p.text-sm,
+.brd-content span.text-sm {
+  font-size: 15px !important;
+}
+
+/* Section titles like "01 / EXECUTIVE SUMMARY": 18px */
+.brd-content h3.tracking-widest {
+  font-size: 18px !important;
+}
+
+/* All font-mono text: minimum 14px */
+.font-mono, 
+[class*="font-mono"],
+code, 
+pre {
+  font-size: 14px !important;
+}
+
+/* Table text: minimum 14px */
+table, 
+tr, 
+td, 
+th {
+  font-size: 14px !important;
+}
+
+/* Badge/label text: minimum 12px */
+.badge, 
+[class*="badge"], 
+span[class*="bg-"], 
+span[class*="rounded"] {
+  font-size: 12px !important;
+}
+
+.glass-card {
+  background: rgba(10, 14, 26, 0.8) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.glass-card:hover {
+  border-color: rgba(232, 65, 42, 0.3) !important;
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
 }
