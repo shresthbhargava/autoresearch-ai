@@ -338,6 +338,7 @@ async def generate_brd_background(request: GenerateRequest, background_tasks: Ba
     active_sessions[session_id] = {
         "session_id": session_id,
         "status": "processing",
+        "startup_name": request.startup_name,
         "traces": [],
         "brd": {},
         "processing_time_ms": 0,
@@ -367,6 +368,7 @@ async def get_session_agents(session_id: str):
                 return {
                     "session_id": session_id,
                     "status": "success",
+                    "startup_name": brd.get("title", "AutoResearch AI").replace("BRD: ", ""),
                     "traces": [
                         AgentTrace(step="1", agent="InputAgent", output_summary="Input checked & validated from archive storage.", tokens_used=0),
                         AgentTrace(step="2", agent="ExtractionAgent", output_summary="Metadata extraction retrieved from archival backup.", tokens_used=120),
